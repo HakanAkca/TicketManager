@@ -1,0 +1,81 @@
+{% extends 'TicketManagerBundle::layout.html.twig' %}
+
+{% block content %}
+    {% if app.user %}
+        <a href="{{ path('create') }}" class="btn btn-default pull-right">
+            Crée un nouveau ticket
+        </a>
+    {% endif %}
+
+    {% if tickets_created is defined %}
+        {% if tickets_created != null %}
+            <h2>Mes tickets</h2>
+        {% else %}
+            <h3>Aucun ticket disponible</h3>
+        {% endif %}
+
+        {% for ticket in tickets_created %}
+            <div class="card text-center">
+                <div class="card-header">
+                    Par {{ ticket.owner }}
+                <div class="card-body">
+                    <h1><a class="card-title" href="{{ path('ticket_show', { 'id': ticket.id }) }}">{{ ticket.title }}</a></h1>
+                    <h2><p class="card-text">{{ ticket.content }}</p></h2>
+                </div>
+                <div class="card-footer text-muted">
+                    {% if ticket.created %}{{ ticket.created|date('Y-m-d H:i:s') }}{% endif %}
+                </div>
+            </div>
+
+                {% for usersGranted in ticket.users %}
+                    {{ usersGranted.username }}
+                {% endfor %}
+            <hr>
+        {% endfor %}
+    {% endif %}
+
+    {% if tickets_granted is defined %}
+        {% if tickets_granted != null %}<h3>Ticket Assigné</h3>{% else %}<h3>Acucun ticket assigné</h3>{% endif %}
+        {% for ticket in tickets_granted %}
+
+            <div class="card text-center">
+                <div class="card-header">
+                    Par {{ ticket.owner }}
+                </div>
+                <div class="card-body">
+                    <h1><a class="card-title" href="{{ path('ticket_show', { 'id': ticket.id }) }}">{{ ticket.title }}</a></h1>
+                    <h2><p class="card-text">{{ ticket.content }}</p></h2>
+                </div>
+                <div class="card-footer text-muted">
+                    {% if ticket.created %}{{ ticket.created|date('Y-m-d H:i:s') }}{% endif %}
+                </div>
+            </div>
+
+                {% for usersGranted in ticket.users %}
+                    {{ usersGranted.username }}
+                {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    {% if tickets is defined %}
+        <h3>Tous les tickets</h3>
+        {% for ticket in tickets %}
+            <div class="card text-center">
+                <div class="card-header">
+                    Par {{ ticket.owner }}
+                </div>
+                <div class="card-body">
+                    <h1><a class="card-title" href="{{ path('ticket_show', { 'id': ticket.id })}} ">{{ ticket.title }}</a></h1>
+                    <h2><p class="card-text">{{ ticket.content }}</p></h2>
+                </div>
+                <div class="card-footer text-muted">
+                    {% if ticket.created %}{{ ticket.created|date('Y-m-d H:i:s') }}{% endif %}
+                </div>
+            </div>
+
+                {% for usersGranted in ticket.users %}
+                    {{ usersGranted.username }}
+                {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

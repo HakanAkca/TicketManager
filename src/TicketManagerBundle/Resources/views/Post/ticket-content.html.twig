@@ -1,0 +1,72 @@
+{% extends 'TicketManagerBundle::layout.html.twig' %}
+
+{% block content %}
+    <a href="{{ path('ticket_index') }}" class="btn btn-default pull-right">Revenir sur la liste</a>
+    <div class="row">
+    <div class="col-sm-12">
+    <div class="card text-center">
+        <div class="card-header">
+            Par {{ ticket.owner }}
+        </div>
+        <div class="card-body">
+            <h1 class="card-title">{{ ticket.title }}</h1>
+            <h2><p class="card-text">{{ ticket.content }}</p></h2>
+        </div>
+        <div class="card-footer text-muted">
+            {% if ticket.created %}{{ ticket.created|date('Y-m-d H:i:s') }}{% endif %}
+        </div>
+    </div>
+
+    {% for user in ticket.users %}
+        <ul>
+            <li>{{ user.username }}</li>
+        </ul>
+    {% endfor %}
+
+
+    {% for role in app.user.roles if role == 'ROLE_ADMIN' %}
+        <h3 class="text-center">Panneaux administrateur</h3>
+
+        <div style="display: inline-flex; padding: 10px; margin-left: 38%">
+            <a href="{{ path('ticket_edit', { 'id': ticket.id }) }}" class="btn btn-default">Editer le
+                ticket</a>
+
+            {{ form_start(delete_form) }}
+            <input type="submit" value="Effacer le ticket" class="btn btn-default">
+            {{ form_end(delete_form) }}
+        </div>
+
+    {% endfor %}
+
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Votre réponse</li>
+            {{ form_start(form, {'action': path('message_new', {'ticketId' : ticket.id}), 'method': 'POST'}) }}
+
+            <li class="list-group-item text-center">{{ form_widget(form) }}</li>
+        </ul>
+    </div>
+    <input type="submit" value="Create" class="btn btn-default">
+
+
+    <hr>
+
+    <h3>Messages</h3>
+
+    {% for message in messages %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>{{ message.user.username }}</h3> <span class="text-muted">commented
+                    {% if ticket.created %}{{ ticket.created|date('Y-m-d H:i:s') }}{% endif %}</span>
+            </div>
+            <div class="panel-body">
+                {{ message.content }}
+            </div>
+        </div>
+        </div>
+
+        </div>
+
+        <hr>
+    {% endfor %}
+{% endblock %}

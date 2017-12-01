@@ -1,0 +1,7 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <p><a href="{{ path('ticket_index') }}">Accueil</a></p>
+{% endblock fos_user_content %}
